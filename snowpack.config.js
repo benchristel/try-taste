@@ -8,6 +8,7 @@ module.exports = {
   ],
   buildOptions: {
     out: "docs",
+    baseUrl: "/try-taste",
   },
   mount: {
     public: {
