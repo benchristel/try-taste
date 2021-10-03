@@ -5,6 +5,7 @@
   "author": "Ben Christel <bchristel@pivotal.io>",
   "license": "MIT",
   "devDependencies": {
+    "@snowpack/plugin-webpack": "^3.0.0",
     "snowpack": "^3.8.8"
   },
   "dependencies": {

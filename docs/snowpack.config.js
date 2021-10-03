@@ -3,6 +3,9 @@
 
 /** @type {import("snowpack").SnowpackUserConfig } */
 module.exports = {
+  plugins: [
+    ["@snowpack/plugin-webpack"],
+  ],
   buildOptions: {
     out: "docs",
   },
