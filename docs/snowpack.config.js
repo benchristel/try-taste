@@ -6,4 +6,14 @@ module.exports = {
   buildOptions: {
     out: "docs",
   },
+  mount: {
+    public: {
+      url: "/",
+      static: true,
+      dot: true, // include files whose names start with .
+    },
+    "": {
+      url: "/",
+    }
+  },
 };
