@@ -1,4 +1,16 @@
-import {runTests, createSuite, formatTestResultsAsText, expect, is} from "@benchristel/taste"
+import {
+  createSuite,
+  runTests,
+  formatTestResultsAsText,
+  expect,
+  is,
+  not,
+  equals,
+  which,
+  debug,
+  curry,
+  reportsFailure,
+} from "@benchristel/taste"
 
 const textarea = document.getElementById('editor')
 const editor = window.CodeMirror.fromTextArea(textarea, {mode: 'javascript'})
@@ -7,8 +19,18 @@ const output = document.getElementById("output")
 async function getTestResults(code) {
   const suite = createSuite()
   window.test = suite.test
+  window.getAllTests = suite.getAllTests
+  window.createSuite = createSuite
+  window.runTests = runTests
+  window.formatTestResultsAsText = formatTestResultsAsText
   window.expect = expect
   window.is = is
+  window.not = not
+  window.equals = equals
+  window.which = which
+  window.debug = debug
+  window.curry = curry
+  window.reportsFailure = reportsFailure
   eval("(function() {" + code + "})()")
   return await runTests(suite.getAllTests())
 }

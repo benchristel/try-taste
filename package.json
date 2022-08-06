@@ -9,6 +9,6 @@
     "snowpack": "^3.8.8"
   },
   "dependencies": {
-    "@benchristel/taste": "^0.1.0"
+    "@benchristel/taste": "^0.3.1"
   }
 }
