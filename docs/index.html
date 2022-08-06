@@ -1,4 +1,14 @@
-<!DOCTYPE html><html><head><title>Try Taste</title><meta charset="utf-8"><script src="./codemirror.js"></script><script src="./javascript_mode.js"></script><link rel="stylesheet" href="./codemirror.css"><style>* {
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Try Taste</title>
+    <meta charset="utf-8">
+    <script src="./codemirror.js"></script>
+    <script src="./javascript_mode.js"></script>
+    <link rel="stylesheet" href="./codemirror.css">
+    <style type="text/css">
+
+* {
   font-family: Menlo, Monaco, monospace;
   margin: 0;
   padding: 0;
@@ -29,8 +39,16 @@
 
 textarea {
   font-size: 18px;
-}</style><script>window.process = {env: {NODE_ENV: "development"}}</script></head><body><textarea id="editor">// This is a hacky demo of the Taste testing library.
-// Test results appear on the right ----&gt; and update as you edit this code.
+}
+
+    </style>
+    <script type="text/javascript">
+      window.process = {env: {NODE_ENV: "development"}}
+    </script>
+  </head>
+  <body>
+    <textarea id="editor">// This is a hacky demo of the Taste testing library.
+// Test results appear on the right ----> and update as you edit this code.
 // For more information, see https://npmjs.org/package/@benchristel/taste
 
 test("reverse", {
@@ -59,4 +77,9 @@ function reverse(s) {
   if (!s.length) return ""
   const [head, ...tail] = s
   return reverse(tail) + head
-}</textarea><div id="output"></div><p id="status"></p><script src="/try-taste/js/webpack-runtime.dca34044d338cb665c53.js"></script><script src="/try-taste/js/index.901eafe86f801e960f53.js"></script></body></html>
+}</textarea>
+    <div id="output"></div>
+    <p id="status"></p>
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>

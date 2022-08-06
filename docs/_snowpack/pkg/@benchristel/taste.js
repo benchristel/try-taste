@@ -112,12 +112,20 @@ const equals = curry(function(a, b) {
   if (a instanceof Date && b instanceof Date) {
     return a.toISOString() === b.toISOString()
   }
-  if (a instanceof Object && b instanceof Object) {
+  if (a instanceof Set && b instanceof Set) {
+    return a.size === b.size
+      && [...a.values()].every(v => b.has(v))
+  }
+  if (a instanceof Error && b instanceof Error) {
+    return a.message === b.message
+      && a.__proto__.constructor === b.__proto__.constructor
+  }
+  if (isObject(a) && isObject(b)) {
     const aKeys = Object.keys(a);
     const bKeys = Object.keys(b);
     return aKeys.length === bKeys.length
       && aKeys.every(k => equals(a[k], b[k]))
-      && a.__proto__.constructor === b.__proto__.constructor
+      && a.__proto__?.constructor === b.__proto__?.constructor
   }
   return a === b
 }, "equals");
@@ -133,6 +141,10 @@ const not = curry(function(predicate, subject, ...args) {
 const isBlank = curry(function(s) {
   return /^\s*$/.test(s)
 }, "isBlank");
+
+function isObject(x) {
+  return !!x && typeof x === "object"
+}
 
 function isCustomMatcher(f) {
   return f instanceof Function
@@ -165,10 +177,15 @@ function pretty(x) {
       return String(x)
     if (x instanceof Error)
       return `${prettyConstructor(x)}(${quote(x.message)})`
-    if (x && Object === x.__proto__.constructor)
-      return preventInfiniteLoop(x, prettyObject)
-    if ("object" === typeof x)
-      return `${prettyConstructor(x)} ${preventInfiniteLoop(x, prettyObject)}`
+    if (x instanceof Set)
+      return preventInfiniteLoop(x, prettySet)
+    if ("object" === typeof x) {
+      const constructor = x?.__proto__?.constructor;
+      if (constructor === Object || !constructor)
+        return preventInfiniteLoop(x, prettyObject)
+      else
+        return `${prettyConstructor(x)} ${preventInfiniteLoop(x, prettyObject)}`
+    }
     return String(x)
   }
 
@@ -195,6 +212,11 @@ function pretty(x) {
     const innards = Object.entries(x)
       .map(([k, v]) => `${prettyKey(k)}: ${_pretty(v)}`);
     return formatStructure("{", innards, ",", "}")
+  }
+
+  function prettySet(x) {
+    const innards = [...x.values()].map(_pretty);
+    return formatStructure("Set {", innards, ",", "}")
   }
 }
 
@@ -298,6 +320,9 @@ function errorFrom(f) {
 }
 
 const debugLogs = [];
+function debug(...args) {
+  debugLogs.push(args);
+}
 
 const isExpectationFailure = curry(
   function isExpectationFailure(args, error) {
@@ -333,6 +358,10 @@ function formatTestResultsAsText({results}) {
     )
   }
   return suitePassed(results.length)
+}
+
+function reportsFailure(testOutput) {
+  return /fail/i.test(testOutput)
 }
 
 function suiteFailed(failures) {
@@ -437,4 +466,4 @@ const basePassingTest = Object.freeze({
   instrumentLog: [],
 });
 
-export { createSuite, expect, formatTestResultsAsText, is, runTests };
+export { createSuite, curry, debug, equals, expect, formatTestResultsAsText, is, not, reportsFailure, runTests, which };

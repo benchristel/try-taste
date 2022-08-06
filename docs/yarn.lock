@@ -868,10 +868,10 @@
     "@babel/helper-validator-identifier" "^7.14.9"
     to-fast-properties "^2.0.0"
 
-"@benchristel/taste@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@benchristel/taste/-/taste-0.1.0.tgz#13ecbde5247da204c56001da8b0e4201a4596754"
-  integrity sha512-NMAH8XLWaTXVtG3wqTF046r+XBwbM4tniMXu1OzpM7bn2mJyGGEa5jJoxiwDomKTTIaRKUehddtgyDj5HaxFJw==
+"@benchristel/taste@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@benchristel/taste/-/taste-0.3.1.tgz#9586f0c40549c149f8e35b5853c3eb1b171799b9"
+  integrity sha512-y0nUZhPJH/wcya/jaWOJuh+XVZ2xGwW96NYFV3z1gIJ2UIZRO5wA8/1O896NEXaDrQ70/h1/ycRSpvRlD/tb+g==
 
 "@gar/promisify@^1.0.1":
   version "1.1.2"
