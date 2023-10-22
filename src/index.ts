@@ -77,7 +77,7 @@ function runCode(code) {
   globalThis.getAllTests = suite.getAllTests
 
   try {
-    eval(code)
+    eval(`(() => {${code}})()`)
     runTests(suite.getAllTests())
       .then(formatTestResultsAsText)
       .then((results) => (output.innerText = results))
