@@ -3,20 +3,25 @@ import {EditorState} from "@codemirror/state"
 import {EditorView, keymap} from "@codemirror/view"
 import {indentWithTab} from "@codemirror/commands"
 import {javascript} from "@codemirror/lang-javascript"
+import debounce from "lodash.debounce"
 import {
   createSuite,
   runTests,
   formatTestResultsAsText,
 } from "@benchristel/taste"
-import * as taste from "@benchristel/taste"
 
 import "./layout.css"
 import "./editor.css"
 import "./output.css"
 
+const debounceMillis = 400
+
 const initialCode = `// This is a hacky demo of the Taste testing library.
 // Test results appear on the right ----> and update as you edit this code.
 // For more information, see https://npmjs.org/package/@benchristel/taste
+
+// NOTE: There is an artificial delay of ${debounceMillis} milliseconds
+// before tests run. The tests themselves run very quickly :)
 
 test("reverse", {
   "does nothing to the empty string"() {
@@ -56,35 +61,34 @@ const editorView = new EditorView({
 const output = document.querySelector("#output")
 
 editorView.dom.addEventListener("keyup", (e) => {
-  runCode(e.target.innerText)
+  output.innerText = "..."
+  runTests(e.target.innerText)
 })
 
-function runCode(code) {
-  globalThis.createSuite = taste.createSuite
-  globalThis.runTests = taste.runTests
-  globalThis.formatTestResultsAsText = taste.formatTestResultsAsText
-  globalThis.expect = taste.expect
-  globalThis.is = taste.is
-  globalThis.not = taste.not
-  globalThis.equals = taste.equals
-  globalThis.which = taste.which
-  globalThis.debug = taste.debug
-  globalThis.curry = taste.curry
-  globalThis.reportsFailure = taste.reportsFailure
+const runTests = debounce((code) => {
+  output.innerText = "Running..."
+  runCodeInWorker(code).then(
+    (results) => (output.innerText = results),
+  )
+}, debounceMillis)
 
-  const suite = createSuite()
-  globalThis.test = suite.test
-  globalThis.getAllTests = suite.getAllTests
-
-  try {
-    eval(`(() => {${code}})()`)
-    runTests(suite.getAllTests())
-      .then(formatTestResultsAsText)
-      .then((results) => (output.innerText = results))
-    output.innerText = "Running code..."
-  } catch (e) {
-    output.innerText = e.message
-  }
+let worker
+function runCodeInWorker(code) {
+  worker?.terminate()
+  worker = new Worker(
+    new URL("./test-runner-worker.ts", import.meta.url),
+    {type: "module"},
+  )
+  worker.postMessage(code)
+  return new Promise((resolve) => {
+    const workerForThisPromise = worker
+    worker.addEventListener("message", ({data: results}) => {
+      if (worker === workerForThisPromise) {
+        resolve(results)
+      }
+    })
+  })
 }
 
-runCode(initialCode)
+runTests(initialCode)
+runTests.flush()
