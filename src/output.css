@@ -1,0 +1,6 @@
+#output {
+  padding: 16px;
+  font-family: monospace;
+  font-size: 1rem;
+  white-space: pre-wrap;
+}

@@ -1,0 +1,32 @@
+html,
+body,
+body > div {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  align-items: stretch;
+  flex-direction: row; /* TODO: layout for narrow screens */
+}
+
+#editor-container {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  padding: 8px;
+}
+
+body > div {
+  width: 300px;
+  flex-basis: 50%;
+  flex-grow: 0;
+}
+
+#output {
+  background: #012;
+  color: #3fc;
+}

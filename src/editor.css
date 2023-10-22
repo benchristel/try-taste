@@ -1,0 +1,13 @@
+/* Make editor a fixed height instead of letting it expand/shrink to fit
+ * its contents.
+ */
+.cm-editor {
+  width: 100%;
+  border: 1px solid #ccc;
+}
+.cm-editor:focus-within {
+  outline: 1px solid #3cf;
+}
+.cm-scroller {
+  overflow: auto;
+}
